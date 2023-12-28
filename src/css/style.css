@@ -175,12 +175,11 @@ button:active {
   justify-content: center;
   align-items: center;
 
-  letter-spacing: 0.6vw;
-  font-size: 5vw;
+  font-size: 2vw;
   color: white;
   text-transform: uppercase;
 
-  margin: 1%;
+  margin: 2%;
 }
 
 /* Box Immagine e Sommario */
