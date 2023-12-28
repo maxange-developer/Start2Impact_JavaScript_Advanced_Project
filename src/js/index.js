@@ -50,7 +50,6 @@ const button = create("button", "button", section, "", "search");
 async function performSearch() {
   let cityName = function (name) {
     name = name.trim();
-    name = name.replaceAll(" ", "-");
     return name;
   };
 
@@ -64,6 +63,7 @@ async function performSearch() {
   try {
     const data = await fetchCityData(city);
     displayResults(data);
+    console.log(data.teleport_cityName);
   } catch (error) {
     console.error(error);
     alert("City not found.");
@@ -103,8 +103,7 @@ async function fetchCityData(city) {
     const urbanAreaImagesData = urbanAreaImagesResponse.data;
 
     return {
-      teleport_cityName:
-        data._embedded["city:search-results"][0].matching_full_name,
+      teleport_cityName: cityData.name,
       teleport_city_score: urbanAreaScoresData.teleport_city_score,
       summary: urbanAreaScoresData.summary,
       categories: urbanAreaScoresData.categories,
