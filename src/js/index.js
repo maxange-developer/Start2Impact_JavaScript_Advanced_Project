@@ -1,5 +1,7 @@
 import "../css/style.css";
 import axios from "axios";
+import _isEmpty from "lodash/isEmpty";
+import _get from "lodash/get";
 
 const body = document.body;
 
@@ -55,7 +57,7 @@ async function performSearch() {
 
   let city = cityName(input.value);
 
-  if (city.length === 0) {
+  if (_isEmpty(city)) {
     alert("Please, enter a city name.");
     return;
   }
@@ -79,22 +81,25 @@ async function fetchCityData(city) {
     );
     const data = response.data;
 
-    if (data.count === 0) {
+    if (_isEmpty(data)) {
       throw new Error("City not found.");
     }
 
     const cityId =
-      data._embedded["city:search-results"][0]._links["city:item"].href;
+       _get(
+      data,
+      "_embedded.city:search-results[0]._links.city:item.href"
+    );
     const cityResponse = await axios.get(cityId);
     const cityData = cityResponse.data;
 
     // Score città
-    const urbanAreaId = cityData._links["city:urban_area"].href;
+    const urbanAreaId = _get(cityData, "_links.city:urban_area.href");
     const urbanAreaScoresResponse = await axios.get(`${urbanAreaId}scores/`);
     const urbanAreaScoresData = urbanAreaScoresResponse.data;
 
     //Immagine città
-    const urbanAreaSlug = cityData._links["city:urban_area"].href
+    const urbanAreaSlug = _get(cityData, "_links.city:urban_area.href")
       .split("/")
       .slice(-2)[0];
     const urbanAreaImagesResponse = await axios.get(
